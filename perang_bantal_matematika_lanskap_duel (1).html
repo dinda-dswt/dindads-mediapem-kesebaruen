@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Perang Bantal Matematika — Mode Duel</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#dbeafe,#ede9fe 55%,#dcfce7);font-family:Arial,system-ui,sans-serif;color:#172554}
+main{max-width:1400px;margin:auto;padding:14px}.header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;background:linear-gradient(100deg,#2563eb,#7c3aed);color:#fff;padding:14px 22px;border-radius:18px;box-shadow:0 6px 18px #4338ca30}
+h1{margin:0;font-size:clamp(22px,3vw,34px)}.subtitle{font-size:14px;margin-top:4px}.stats{display:flex;gap:10px;flex-wrap:wrap}.stat{background:#ffffff24;border:1px solid #ffffff50;padding:8px 12px;border-radius:12px;font-weight:bold}
+.arena{position:relative;margin:12px 0;background:linear-gradient(#8bd3ff 0%,#dff4ff 57%,#a7f3d0 58%,#6ee7b7 100%);border:3px solid #fff;border-radius:18px;overflow:hidden;box-shadow:0 5px 16px #1e3a8a20}
+.arena svg{display:block;width:100%;height:auto;max-height:340px}
+.character{transform-box:fill-box;transform-origin:center;transition:transform .25s}.attack-left{animation:hitLeft .65s ease}.attack-right{animation:hitRight .65s ease}@keyframes hitLeft{0%{transform:rotate(0)}35%{transform:translate(40px,-12px) rotate(18deg)}70%{transform:translate(10px,0) rotate(-8deg)}100%{transform:none}}@keyframes hitRight{0%{transform:rotate(0)}35%{transform:translate(-40px,-12px) rotate(-18deg)}70%{transform:translate(-10px,0) rotate(8deg)}100%{transform:none}}
+.water{animation:wave 2.5s ease-in-out infinite}@keyframes wave{0%,100%{transform:translateX(0)}50%{transform:translateX(10px)}}
+.duel{display:grid;grid-template-columns:1fr 1fr;gap:12px}.side{background:white;border-radius:16px;padding:14px;border:3px solid #c7d2fe;box-shadow:0 4px 12px #1e3a8a12}.side.p1{border-color:#60a5fa}.side.p2{border-color:#a78bfa}.sidehead{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}.side h2{margin:0;font-size:20px}.score{font-size:22px;font-weight:900}.questionbox{background:#f8fafc;border-radius:12px;padding:12px;margin:10px 0}.qnum{font-size:12px;color:#64748b;font-weight:bold}.question{font-size:17px;font-weight:750;margin:5px 0 0}.choices{display:grid;grid-template-columns:1fr 1fr;gap:8px}.choice{padding:10px;border:2px solid #c7d2fe;border-radius:10px;background:#fff;font-size:15px;font-weight:650;text-align:left;cursor:pointer}.choice:hover:not(:disabled){background:#ede9fe;border-color:#8b5cf6}.choice:disabled{cursor:default;opacity:.85}.choice.selected{border-color:#7c3aed;background:#ede9fe}.choice.correct{border-color:#16a34a;background:#dcfce7}.choice.wrong{border-color:#ef4444;background:#fee2e2}.status{min-height:38px;margin:8px 0;font-weight:700;color:#475569}.pill{border-radius:999px;padding:5px 10px;background:#e0e7ff;font-size:13px;font-weight:bold}.btn{border:0;border-radius:10px;padding:10px 16px;background:linear-gradient(90deg,#2563eb,#7c3aed);color:white;font-weight:800;cursor:pointer}.btn:disabled{opacity:.4;cursor:not-allowed}.bottom{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:12px}.explanation{background:#fef3c7;border:2px solid #fbbf24;border-radius:12px;padding:12px;margin-top:10px;display:none}.result{font-size:20px;font-weight:900;text-align:center;color:#6d28d9;margin:10px}.small{font-size:12px;color:#64748b}.balance{font-size:15px;letter-spacing:2px}
+@media(max-width:760px){.duel{grid-template-columns:1fr}.arena svg{min-height:190px}.choices{grid-template-columns:1fr 1fr}.header{justify-content:center;text-align:center}}
+</style>
+</head>
+<body><main>
+<header class="header"><div><h1>🛏️ Perang Bantal Matematika</h1><div class="subtitle">Duel seru: kesebangunan & kekongruenan segitiga dan segiempat</div></div><div class="stats"><div class="stat">📚 Soal <span id="round">1</span>/7</div><div class="stat">⏱️ <span id="timer">30</span> detik</div><div class="stat">⚡ Jawab serentak!</div></div></header>
+
+<section class="arena" aria-label="Animasi duel perang bantal">
+<svg viewBox="0 0 1200 330" role="img" aria-label="Dua siswa duduk berhadapan di atas batang pohon melintang di atas kolam, masing-masing memegang bantal">
+<defs><linearGradient id="log" x1="0" x2="0" y1="0" y2="1"><stop stop-color="#a16207"/><stop offset=".5" stop-color="#854d0e"/><stop offset="1" stop-color="#713f12"/></linearGradient><linearGradient id="pond"><stop stop-color="#38bdf8"/><stop offset="1" stop-color="#0284c7"/></linearGradient></defs>
+<rect width="1200" height="330" fill="transparent"/>
+<!-- far bank / hills -->
+<path d="M0 170 Q150 110 300 160 T600 145 T900 160 T1200 130 L1200 230 L0 230Z" fill="#86efac"/>
+<g fill="#22c55e"><circle cx="90" cy="145" r="45"/><circle cx="140" cy="150" r="35"/><circle cx="1080" cy="145" r="48"/><circle cx="1130" cy="155" r="34"/></g>
+<!-- pond -->
+<path d="M0 220 Q150 205 300 225 T600 218 T900 225 T1200 215 L1200 330 L0 330Z" fill="url(#pond)"/>
+<g class="water" fill="none" stroke="#bae6fd" stroke-width="5" opacity=".8"><path d="M60 265 Q130 250 200 265 T340 265"/><path d="M790 280 Q860 265 930 280 T1070 280"/><path d="M420 305 Q480 290 540 305 T660 305"/></g>
+<!-- trunk -->
+<g><rect x="90" y="204" width="1020" height="46" rx="22" fill="url(#log)" stroke="#713f12" stroke-width="5"/><ellipse cx="96" cy="227" rx="20" ry="23" fill="#b7791f" stroke="#713f12" stroke-width="4"/><ellipse cx="1104" cy="227" rx="20" ry="23" fill="#b7791f" stroke="#713f12" stroke-width="4"/><path d="M180 220 Q260 238 350 220 M520 218 Q600 240 690 220 M820 220 Q900 238 1000 220" stroke="#d6a35b" stroke-width="4" fill="none"/></g>
+<!-- left character group -->
+<g class="character" id="char1">
+<!-- legs sitting -->
+<path d="M330 188 Q300 210 350 218 L420 218 Q445 205 410 190" fill="#2563eb" stroke="#1e40af" stroke-width="4"/>
+<!-- body -->
+<rect x="340" y="128" width="78" height="74" rx="25" fill="#60a5fa" stroke="#1d4ed8" stroke-width="4"/>
+<!-- head -->
+<circle cx="378" cy="94" r="43" fill="#f5c9a5" stroke="#9a5b3b" stroke-width="3"/>
+<path d="M337 92 Q325 42 378 46 Q424 48 420 91 L410 70 Q380 78 345 66Z" fill="#3f2b20"/>
+<circle cx="365" cy="96" r="5" fill="#1f2937"/><circle cx="393" cy="96" r="5" fill="#1f2937"/><path d="M367 112 Q380 122 394 111" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+<!-- arm and pillow -->
+<path d="M410 148 Q445 145 460 122" stroke="#f5c9a5" stroke-width="17" fill="none" stroke-linecap="round"/>
+<rect x="440" y="83" width="90" height="57" rx="18" fill="#dbeafe" stroke="#2563eb" stroke-width="5" transform="rotate(-18 485 111)"/><path d="M455 100 Q480 110 512 95" stroke="#93c5fd" stroke-width="3" fill="none"/>
+</g>
+<!-- right character -->
+<g class="character" id="char2">
+<path d="M790 188 Q760 210 810 218 L880 218 Q905 205 870 190" fill="#7c3aed" stroke="#5b21b6" stroke-width="4"/>
+<rect x="790" y="128" width="78" height="74" rx="25" fill="#c4b5fd" stroke="#7c3aed" stroke-width="4"/>
+<circle cx="830" cy="94" r="43" fill="#f5c9a5" stroke="#9a5b3b" stroke-width="3"/>
+<path d="M788 92 Q780 42 830 46 Q878 48 872 91 L862 70 Q832 78 796 66Z" fill="#4c1d95"/>
+<circle cx="817" cy="96" r="5" fill="#1f2937"/><circle cx="845" cy="96" r="5" fill="#1f2937"/><path d="M819 112 Q832 122 846 111" fill="none" stroke="#9a3412" stroke-width="3" stroke-linecap="round"/>
+<path d="M795 148 Q765 145 750 122" stroke="#f5c9a5" stroke-width="17" fill="none" stroke-linecap="round"/>
+<rect x="680" y="83" width="90" height="57" rx="18" fill="#f3e8ff" stroke="#7c3aed" stroke-width="5" transform="rotate(18 725 111)"/><path d="M698 100 Q725 110 752 95" stroke="#c4b5fd" stroke-width="3" fill="none"/>
+</g>
+<g font-size="20" font-weight="bold" fill="#1e3a8a"><text x="245" y="28">🧑‍🎓 Pemain 1</text><text x="850" y="28">👩‍🎓 Pemain 2</text></g>
+<g font-size="16" fill="#075985" font-weight="bold"><text x="20" y="315">🌊 Kolam air</text><text x="955" y="315">🌊 Kolam air</text></g>
+</svg>
+</section>
+
+<div class="duel">
+<section class="side p1"><div class="sidehead"><h2>🔵 Pemain 1</h2><span class="pill">Jawab di sisi kiri</span><span class="score">⭐ <span id="score1">0</span></span></div><div class="balance" id="balance1">Keseimbangan: 🪵🪵🪵🪵🪵</div><div class="questionbox"><div class="qnum">PERTANYAAN <span class="qno">1</span></div><div class="question" id="q1">Klik Mulai Permainan.</div></div><div class="choices" id="choices1"></div><div class="status" id="status1">Pilih jawabanmu!</div></section>
+<section class="side p2"><div class="sidehead"><h2>🟣 Pemain 2</h2><span class="pill">Jawab di sisi kanan</span><span class="score">⭐ <span id="score2">0</span></span></div><div class="balance" id="balance2">Keseimbangan: 🪵🪵🪵🪵🪵</div><div class="questionbox"><div class="qnum">PERTANYAAN <span class="qno">1</span></div><div class="question" id="q2">Klik Mulai Permainan.</div></div><div class="choices" id="choices2"></div><div class="status" id="status2">Pilih jawabanmu!</div></section>
+</div>
+<div class="explanation" id="explanation"></div><div class="result" id="result"></div>
+<div class="bottom"><button class="btn" id="start">▶ Mulai Permainan</button><button class="btn" id="next" disabled>Soal berikutnya →</button><button class="btn" id="restart" onclick="location.reload()">🔄 Ulangi</button></div>
+<p class="small">Aturan: kedua pemain menjawab pertanyaan yang sama secara bersamaan dari panel masing-masing. Jawaban tidak akan ditandai benar/salah sampai kedua pemain memilih. Jawaban benar mendapat 1 poin. Pemain dengan jawaban benar tercepat mendapat kesempatan serangan bantal (mengurangi 1 keseimbangan lawan). Jika keduanya salah, penjelasan konsep akan ditampilkan. Setelah 7 soal, skor tertinggi menang.</p>
+</main>
+<script>
+const data=[
+{q:"Dua segitiga memiliki sudut bersesuaian sama besar dan sisi bersesuaian sebanding. Kedua segitiga itu …",a:["Kongruen","Sebangun","Tidak berhubungan","Sama luas"],c:1,e:"Segitiga sebangun memiliki sudut bersesuaian sama besar dan sisi bersesuaian sebanding. Ukurannya boleh berbeda."},
+{q:"Segitiga A memiliki sisi 3, 4, 5 cm. Segitiga B juga memiliki sisi 3, 4, 5 cm. Kedua segitiga …",a:["Sebangun saja","Kongruen","Tidak sebangun","Tidak kongruen"],c:1,e:"Ketiga sisi bersesuaian sama panjang, sehingga kedua segitiga kongruen (dan juga sebangun)."},
+{q:"Persegi dengan sisi 4 cm dan persegi dengan sisi 8 cm adalah …",a:["Kongruen","Sebangun","Tidak sebangun","Sudutnya berbeda"],c:1,e:"Semua persegi sebangun karena sudut-sudutnya sama dan perbandingan sisi bersesuaian tetap. Namun, ukuran kedua persegi berbeda sehingga tidak kongruen."},
+{q:"Persegi panjang 4 × 6 cm dan 8 × 12 cm memiliki hubungan …",a:["Kongruen","Sebangun","Tidak sebangun","Sama ukuran"],c:1,e:"Perbandingan sisi bersesuaian 4:8 = 6:12 = 1:2, maka kedua persegi panjang sebangun."},
+{q:"Syarat dua segitiga kongruen adalah …",a:["Bentuk sama, ukuran boleh berbeda","Hanya sudutnya sama","Bentuk dan ukuran sama","Luas selalu berbeda"],c:2,e:"Bangun kongruen memiliki bentuk dan ukuran yang sama; sisi dan sudut bersesuaian sama."},
+{q:"Segitiga diperbesar dengan faktor skala 3. Hasilnya …",a:["Kongruen dengan semula","Sebangun dengan semula","Bentuk berubah","Sudut berubah"],c:1,e:"Perbesaran mempertahankan bentuk dan sudut, tetapi panjang sisi berubah dengan faktor skala 3."},
+{q:"Pasangan bangun yang kongruen adalah …",a:["Lingkaran berjari-jari 2 dan 5 cm","Dua persegi sisi 5 cm","Persegi sisi 2 dan 4 cm","Segitiga bersudut sama dengan ukuran berbeda"],c:1,e:"Dua persegi dengan panjang sisi sama memiliki bentuk dan ukuran yang sama, sehingga kongruen."}
+];
+let n=0,score=[0,0],bal=[5,5],chosen=[null,null],done=false,clock=null,seconds=30,started=false;
+const el=id=>document.getElementById(id);
+function render(){el('round').textContent=n+1;document.querySelectorAll('.qno').forEach(x=>x.textContent=n+1);['q1','q2'].forEach(id=>el(id).textContent=data[n].q);for(let p=0;p<2;p++){let box=el('choices'+(p+1));box.innerHTML='';data[n].a.forEach((a,i)=>{let b=document.createElement('button');b.className='choice';b.textContent=['A','B','C','D'][i]+'. '+a;b.onclick=()=>pick(p,i,b);box.appendChild(b)});el('status'+(p+1)).textContent='Pilih jawabanmu!';}el('explanation').style.display='none';el('explanation').textContent='';el('result').textContent='';el('next').disabled=true;chosen=[null,null];done=false;seconds=30;el('timer').textContent=seconds;clearInterval(clock);clock=setInterval(()=>{seconds--;el('timer').textContent=seconds;if(seconds<=0){clearInterval(clock);if(chosen[0]===null)chosen[0]=-1;if(chosen[1]===null)chosen[1]=-1;reveal(true)}},1000);}
+function pick(p,i,btn){if(done||chosen[p]!==null)return;chosen[p]=i;document.querySelectorAll('#choices'+(p+1)+' .choice').forEach(b=>b.disabled=true);btn.classList.add('selected');el('status'+(p+1)).textContent='🔒 Jawaban terkunci! Menunggu pemain '+(p===0?'2':'1')+'…';if(chosen[0]!==null&&chosen[1]!==null)reveal(false);}
+function reveal(timeout){done=true;clearInterval(clock);let correct=[chosen[0]===data[n].c,chosen[1]===data[n].c];for(let p=0;p<2;p++){let buttons=document.querySelectorAll('#choices'+(p+1)+' .choice');buttons.forEach((b,i)=>{b.disabled=true;if(i===data[n].c)b.classList.add('correct');if(chosen[p]===i&&i!==data[n].c)b.classList.add('wrong')});if(correct[p]){score[p]++;el('status'+(p+1)).textContent='✅ Jawaban benar! +1 poin';}else el('status'+(p+1)).textContent=chosen[p]===-1?'⏰ Waktu habis!':'❌ Jawaban salah.';el('score'+(p+1)).textContent=score[p];}
+let msg='';if(correct[0]&&correct[1])msg='Keduanya benar!';else if(correct[0])msg='Pemain 1 benar dan mendapat kesempatan serangan bantal!';else if(correct[1])msg='Pemain 2 benar dan mendapat kesempatan serangan bantal!';else msg='Keduanya belum benar. Simak penjelasan berikut!';
+el('result').textContent=msg;
+if(!correct[0]&&!correct[1]){el('explanation').style.display='block';el('explanation').innerHTML='<strong>💡 Pembahasan:</strong> '+data[n].e}
+else if(correct[0]!==correct[1]){let winner=correct[0]?0:1,loser=1-winner;bal[loser]=Math.max(0,bal[loser]-1);el('explanation').style.display='block';el('explanation').innerHTML='🛏️ <strong>Serangan bantal!</strong> Pemain '+(winner+1)+' menyerang Pemain '+(loser+1)+'!<br><strong>💡 Pembahasan:</strong> '+data[n].e;document.getElementById('char'+(winner+1)).classList.add(winner===0?'attack-left':'attack-right');setTimeout(()=>{document.getElementById('char'+(winner+1)).classList.remove('attack-left','attack-right')},700);}
+else {el('explanation').style.display='block';el('explanation').innerHTML='💡 <strong>Pembahasan:</strong> '+data[n].e}
+for(let p=0;p<2;p++)el('balance'+(p+1)).textContent='Keseimbangan: '+('🪵'.repeat(bal[p])||'💦 Jatuh!');el('next').disabled=false;if(n===6)el('next').textContent='Lihat hasil akhir 🏆';}
+el('start').onclick=()=>{if(started)return;started=true;el('start').disabled=true;render()};
+el('next').onclick=()=>{n++;if(n>=data.length){clearInterval(clock);el('next').disabled=true;el('result').textContent=score[0]>score[1]?'🏆 Pemain 1 menang dengan '+score[0]+' poin!':score[1]>score[0]?'🏆 Pemain 2 menang dengan '+score[1]+' poin!':'🤝 Permainan seri! Skor sama-sama '+score[0]+' poin.';el('explanation').style.display='none';return}render()};
+</script>
+</body></html>
